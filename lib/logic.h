@@ -31,6 +31,27 @@ bool validateDate(const std::string& date) {
     std::regex pattern(R"(\d{2}\.\d{2}\.\d{4})");
     return std::regex_match(date, pattern);
 }
+bool isValidDate(string date){
+	int day = 0, month = 0, year = 0;
+	char point1, point2;
+	stringstream ss(date);
+	if (date.size() != 10)
+	{
+		return false;
+	}
+	else if (!(ss >> day >> point1 >> month >> point2 >> year) || point1 != '.' || point2 != '.')
+	{
+		return false;
+	}
+	else if (day < 1 || day > 31 || month < 1 || month > 12 || year < 2025)
+	{
+		return false;
+	}
+	else if (!((year % 100) % 4 == 0) && month == 2 && day > 31) {
+		return false;
+	}
+	return true;
+}
 bool validateTime(const std::string& time) {
     std::regex pattern(R"((0\d|1\d|2[0-3]):[0-5]\d)");
     return std::regex_match(time, pattern);
