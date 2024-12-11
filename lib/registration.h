@@ -90,6 +90,7 @@ void registrate(std::string login, std::string pass, std::string registrationFil
     std::ofstream fout(registrationFile, std::ios_base::app);
     if (!fout.is_open()) {
         std::cerr << "Error opening file: " << registrationFile << std::endl;
+        fout.close();
         return;
     }
 
@@ -98,6 +99,7 @@ void registrate(std::string login, std::string pass, std::string registrationFil
 
     if (first.empty() || second.empty()) {
         std::cerr << "Error: encoded login or password is empty." << std::endl;
+        fout.close();
         return;
     }
 
@@ -105,6 +107,23 @@ void registrate(std::string login, std::string pass, std::string registrationFil
     if (!fout) {
         std::cerr << "Error writing to file." << std::endl;
     }
+    fout.close();
+}
+
+int login_account(std::string login, std::string pass, std::string fileName) {
+    std::ifstream fin(fileName);
+    std::string currentLogin, currentPassword;
+    std::string line;
+    while (std::getline(fin, line)) {
+        istringstream iss(line);
+        iss >> currentLogin >> currentPassword;
+        if (currentLogin == decode(login) && currentPassword == decode(pass)) {
+            fin.close();
+            return 1;
+        }
+    }
+    fin.close();
+    return 0;
 }
 
 
