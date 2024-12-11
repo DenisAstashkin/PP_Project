@@ -97,7 +97,7 @@ std::map<std::string, Film> parser(std::vector<std::string> lines) {		//Разд
 		std::vector<std::string> times;
 
 		for (std::string time : split(separate_str, ","))
-			data_Film.times.push_back(time);
+			data_Film.data.push_back(time);
 		
 		Film_dates[date] = data_Film;
 	}

@@ -4,30 +4,47 @@
 #include "../model/texture_for_seats.h"
 
 #include <iostream>
-#include <windows.h>
 #include <vector>
 #include <string>
 
-// Function for setting padding for centering
-void set_padding(const int& size_text)
-{
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+#ifdef _WIN32
+	#include <Windows.h>
 
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	GetConsoleScreenBufferInfo(hConsole, &csbi);
+	// Function for setting padding for centering
+	void set_padding(const int& size_text)
+	{
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	int console_width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+		CONSOLE_SCREEN_BUFFER_INFO csbi;
+		GetConsoleScreenBufferInfo(hConsole, &csbi);
 
-	int padding = (console_width - size_text) / 2;
+		int console_width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
 
-	std::cout.width(padding);
-}
+		int padding = (console_width + size_text) / 2;
+
+		std::cout.width(padding);
+	}
+
+#elif __linux__
+	#include <sys/ioctl.h>
+	#include <unistd.h>
+
+	// Function for setting padding for centering
+	void set_padding(const int& size_text)
+	{
+		struct winsize w;
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+		int padding = (w.ws_col + size_text) / 2;
+
+		std::cout.width(padding);
+	}	
+
+#endif
 
 // Function for displaying seats in the cinema hall
 void print_cinemahall(const std::vector<std::vector<int>>& hall)
 {
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
 	for (int i = 0; i < hall.size(); i++)
 	{
 		set_padding(hall[i].size() * 2);
@@ -37,21 +54,15 @@ void print_cinemahall(const std::vector<std::vector<int>>& hall)
 			switch (hall[i][j])
 			{
 			case static_cast<int>(condition_place::empty):
-				SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
-				std::cout << static_cast<char>(texture_for_seats::empty) << ' ';
-				SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
+			std::cout << "\033[93m" << static_cast<char>(texture_for_seats::empty) << "\033[39m" << ' ';
 				break;
 
 			case static_cast<int>(condition_place::seat):
-				SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
-				std::cout << static_cast<char>(texture_for_seats::seat) << ' ';
-				SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
+				std::cout << "\033[91m" << static_cast<char>(texture_for_seats::seat) << "\033[39m" << ' ';
 				break;
 
 			case static_cast<int>(condition_place::yours):
-				SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-				std::cout << static_cast<char>(texture_for_seats::yours) << ' ';
-				SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
+				std::cout << "\033[92m" << static_cast<char>(texture_for_seats::yours) << "\033[39m" << ' ';
 				break;
 			}
 		}
@@ -59,12 +70,18 @@ void print_cinemahall(const std::vector<std::vector<int>>& hall)
 	}
 }
 
+void center_print(const std::string& text)
+{
+	set_padding(text.length());
+	std::cout << text << '\n';
+}
+
 void print_previw()
 {
 		std::string cinemaName = "Luxury Cinema";
-		std::cout << "\033[2J\033[1;1H"; // Î÷èñòêà ýêðàíà
+		std::cout << "\033[2J\033[1;1H"; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-		std::cout << "\033[1;31m"; // Êðàñíûé öâåò
+		std::cout << "\033[1;31m"; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 		std::cout << "_____________________________________________@@___________________________________________________________________________________________________________________________________________________________________________________\n";
 		std::cout << "_____@@@@_________________________________@@@@@@______LLLLLLLLLL__________UUUUUUUU_________UUUUUUUU_XXXXXXXX_____________XXXXXXXX_______________AAAAAAAAAAAA_______________RRRRRRRRRRRRRRRRRRRRRRR_YYYYYYY___________YYYYYYY______\n";
@@ -105,13 +122,13 @@ void print_previw()
 		std::cout << "__________________@@@@____@@@@@@______________________CCCCCCCCCCCCCCCCCCC_IIIIIIIIII_NNNNNNN_______________NNNNNNNNNN_EEEEEEEEEEEEEEEEEEEE_MMMMMMMM________________________MMMMMMMM_AAAAAAAA________________________AAAAAAAA______\n";
 		std::cout << "__________________________@@______________________________________________________________________________________________________________________________________________________________________________________________________\n";
 
-		std::cout << "\033[0m";   // Ñáðîñ öâåòà
-		std::string address = "óë. Êðóòûõ Ïìèøíèêîâ, 1";
+		std::cout << "\033[0m";   // Ð¡Ð±Ñ€Ð¾Ñ Ñ†Ð²ÐµÑ‚Ð°
+		std::string address = "ÑƒÐ». ÐšÑ€ÑƒÑ‚Ñ‹Ñ… ÐŸÐ¼Ð¸ÑˆÐ½Ð¸ÐºÐ¾Ð², 1";
 		std::string phoneNumber = "+7 (123) 456-78-90";
 		std::string website = "www.luxurycinema.com";
 		std::cout << address << '\n';
 		std::cout << phoneNumber << '\n';
 		std::cout << website << '\n';
 
-		std::cout << "Ïðèÿòíîãî ïðîñìîòðà!\n";
+		std::cout << "ÐŸÑ€Ð¸ÑÑ‚Ð½Ð¾Ð³Ð¾ Ð¿Ñ€Ð¾ÑÐ¼Ð¾Ñ‚Ñ€Ð°!\n";
 }

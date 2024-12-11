@@ -93,6 +93,12 @@ out/
 #Test-datafiles
 Data/
 
+#unix bin dir
+bin/
+
+#vscode
+.vscode/
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 

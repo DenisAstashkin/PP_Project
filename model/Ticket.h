@@ -3,7 +3,10 @@
 #include <string>
 #include <vector>
 
-struct Ticket {
+struct Ticket 
+{
+	std::string userName;
+
 	std::string date;
 	std::string filmName;
 	std::string startTime;

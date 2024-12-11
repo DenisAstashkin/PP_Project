@@ -5,5 +5,5 @@
 struct Film 
 {		
 	std::string name;
-	std::vector<std::string> times;
+	std::vector<std::string> data;
 };
