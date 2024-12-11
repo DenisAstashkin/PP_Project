@@ -4,6 +4,7 @@
 #include <string>
 #include "../model/constants.h"
 #include <iostream>
+#include <sstream>
 std::string encode(std::string text) {
     std::string result;
     for (char c : text) {
@@ -65,8 +66,27 @@ std::string decode(std::string text) {
     }
     return result;
 }
+bool isLoginInBase(const std::string& login, std::ifstream& fout) {
+    std::string line;
+    std::string currentLogin, password;
 
+    while (std::getline(fout, line)) {  // Читаем файл построчно
+        std::istringstream iss(line);
+        iss >> currentLogin >> password;  // Извлекаем логин и пароль из строки
+        if (currentLogin == login) {
+            return true; 
+        }
+    }
+    return false;  // Логин не найден
+}
 void registrate(std::string login, std::string pass, std::string registrationFile) {
+    std::ifstream fin(registrationFile);
+    if (isLoginInBase(encode(login), fin)) {
+        std::cerr << "Login is already exist";
+        fin.close();
+        return;
+    }
+    fin.close();
     std::ofstream fout(registrationFile, std::ios_base::app);
     if (!fout.is_open()) {
         std::cerr << "Error opening file: " << registrationFile << std::endl;
@@ -86,6 +106,8 @@ void registrate(std::string login, std::string pass, std::string registrationFil
         std::cerr << "Error writing to file." << std::endl;
     }
 }
+
+
 
 
 
