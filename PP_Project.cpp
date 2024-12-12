@@ -11,13 +11,11 @@ using namespace std;
 
 int main()
 {
+
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
-
-	registrate("loginsdada", "passwordsdadas", "base.txt");
 	
-
-
+	login_interface();
 	//auto seanses = get_file_info("путь до файла с сеансами"); 	// пример строки в файле 01.12.2024;Doctor Who;11:00,12:00,16:00
 	//auto coasts = get_file_info("путь до файла с ценами");		// пример строки в файле 01.12.2024;Doctor Who;00:00-390rub,15:15-450rub,20:20-500rub
 
@@ -55,7 +53,6 @@ int main()
 	//	}
 	//	cout << "\n\n";
 	//}
-
 	//system("pause");
 	return 0;
 }

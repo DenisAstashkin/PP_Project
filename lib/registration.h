@@ -79,52 +79,48 @@ bool isLoginInBase(const std::string& login, std::ifstream& fout) {
     }
     return false;  // Логин не найден
 }
-void registrate(std::string login, std::string pass, std::string registrationFile) {
-    std::ifstream fin(registrationFile);
-    if (isLoginInBase(encode(login), fin)) {
-        std::cerr << "Login is already exist";
-        fin.close();
-        return;
-    }
-    fin.close();
-    std::ofstream fout(registrationFile, std::ios_base::app);
-    if (!fout.is_open()) {
-        std::cerr << "Error opening file: " << registrationFile << std::endl;
-        fout.close();
-        return;
-    }
-
-    std::string first = encode(login);
-    std::string second = encode(pass);
-
-    if (first.empty() || second.empty()) {
-        std::cerr << "Error: encoded login or password is empty." << std::endl;
-        fout.close();
-        return;
-    }
-
-    fout << first << " " << second << "\n";
-    if (!fout) {
-        std::cerr << "Error writing to file." << std::endl;
-    }
-    fout.close();
-}
-
 int login_account(std::string login, std::string pass, std::string fileName) {
     std::ifstream fin(fileName);
+    
     std::string currentLogin, currentPassword;
     std::string line;
     while (std::getline(fin, line)) {
-        istringstream iss(line);
+        std::istringstream iss(line);
         iss >> currentLogin >> currentPassword;
-        if (currentLogin == decode(login) && currentPassword == decode(pass)) {
+        if (decode(currentLogin) == login && decode(currentPassword) != pass) {
+            fin.close();
+            std::cout << "Неверный пароль\n";
+            return 0;
+        }
+        if (decode(currentLogin) == login && decode(currentPassword) == pass) {
+            std::cout << "Вы успешно вошли в аккаунт!\n";
             fin.close();
             return 1;
         }
     }
     fin.close();
+    std::cout << "Такого пользователя нет в базе\n";
     return 0;
 }
+
+void login_interface() {
+    std::string fileName = registrationFilename;
+    
+    while (true) {
+        std::cout << "Вход в приложение....\n";
+        std::string line;
+        std::string login;
+        std::string password;
+        std::cout << "Введите логин и пароль: ";
+        std::getline(std::cin, line);
+        std::istringstream iss(line);
+        iss >> login >> password;
+        int flag = login_account(login, password, registrationFilename);
+        if (flag) break;
+
+    }
+}
+
 
 
 
