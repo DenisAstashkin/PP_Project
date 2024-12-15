@@ -1,4 +1,4 @@
-#include "lib/interface_design.h"
+п»ї#include "lib/interface_design.h"
 #include "lib/logic.h"
 #include "lib/registration.h"
 #include "model/Film.h"
@@ -34,8 +34,8 @@ int main()
 
 	reset(cinemahall);
 
-	auto seanses = get_file_info(path_seanses); 	// Пример входных данных: 13.12.2024;Аватар;13:10-2,16:15-1
-	auto coasts = get_file_info(path_coasts);		// Пример входных данных: 01.12.2024;Doctor Who;00:00-390rub,15:15-450rub,20:20-500rub
+	auto seanses = get_file_info(path_seanses); 	// РџСЂРёРјРµСЂ РІС…РѕРґРЅС‹С… РґР°РЅРЅС‹С…: 13.12.2024;РђРІР°С‚Р°СЂ;13:10-2,16:15-1
+	auto coasts = get_file_info(path_coasts);		// РџСЂРёРјРµСЂ РІС…РѕРґРЅС‹С… РґР°РЅРЅС‹С…: 01.12.2024;Doctor Who;00:00-390rub,15:15-450rub,20:20-500rub
 	
 	string console_buffer;
 
@@ -79,15 +79,15 @@ int main()
 
 				do
 				{
-					cout << "\n0 - Выход\nВведите дату сеансов (дд.мм.гггг): ";
+					cout << "\n0 - Р’С‹С…РѕРґ\nР’РІРµРґРёС‚Рµ РґР°С‚Сѓ СЃРµР°РЅСЃРѕРІ (РґРґ.РјРј.РіРіРіРі): ";
 					getline(cin, console_buffer);
 					if (console_buffer.length() == 1 && console_buffer.find('0') != string::npos)
 						exit(0);
 					check = validate_date(console_buffer);
 					if (!check)
-						cout << "\nНеверный формат даты. ";
+						cout << "\nРќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ РґР°С‚С‹. ";
 					else if (!find_time(seanses, console_buffer))
-						cout << "\nСеанса с данной датой нет";
+						cout << "\nРЎРµР°РЅСЃР° СЃ РґР°РЅРЅРѕР№ РґР°С‚РѕР№ РЅРµС‚";
 
 				} while (!check || !find_time(seanses, console_buffer));
 				ticket.date = console_buffer;
@@ -107,7 +107,7 @@ int main()
 
 				do
 				{
-					cout << "\n0 - Назад\nВведите название фильма: ";
+					cout << "\n0 - РќР°Р·Р°Рґ\nР’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ С„РёР»СЊРјР°: ";
 					getline(cin, console_buffer);
 					if (console_buffer.length() == 1 && console_buffer.find('0') != string::npos)
 					{
@@ -131,11 +131,11 @@ int main()
 				print_film(choose_film.second, choose_film.first);
 
 				
-				print_coasts(choose_film, coasts, "Цена скоро появится");
+				print_coasts(choose_film, coasts, "Р¦РµРЅР° СЃРєРѕСЂРѕ РїРѕСЏРІРёС‚СЃСЏ");
 
 				do
 				{
-					cout << "\n0 - Назад\nВведите время сеанса (чч:мм): ";
+					cout << "\n0 - РќР°Р·Р°Рґ\nР’РІРµРґРёС‚Рµ РІСЂРµРјСЏ СЃРµР°РЅСЃР° (С‡С‡:РјРј): ";
 					getline(cin, console_buffer);
 
 					if (console_buffer == "0")
@@ -144,9 +144,9 @@ int main()
 						break;
 					}
 					else if (!validateTime(console_buffer))
-						cout << "Введён неверный формат времени\n";
+						cout << "Р’РІРµРґС‘РЅ РЅРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ РІСЂРµРјРµРЅРё\n";
 					else if (!find_time(choose_film.second.data, console_buffer))
-						cout << "Такого времени нет в расписании\n";
+						cout << "РўР°РєРѕРіРѕ РІСЂРµРјРµРЅРё РЅРµС‚ РІ СЂР°СЃРїРёСЃР°РЅРёРё\n";
 
 				} while (!validateTime(console_buffer) || !find_time(choose_film.second.data, console_buffer));
 				if (back != 2)
@@ -156,18 +156,18 @@ int main()
 				if (back == 2 && find_time(choose_film.second.data, console_buffer))
 				{
 					
-					cout << "\n0 - Назад\n1 - Выбрать места вручную\n2 - Выбрать N мест автоматически\n";
+					cout << "\n0 - РќР°Р·Р°Рґ\n1 - Р’С‹Р±СЂР°С‚СЊ РјРµСЃС‚Р° РІСЂСѓС‡РЅСѓСЋ\n2 - Р’С‹Р±СЂР°С‚СЊ N РјРµСЃС‚ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё\n";
 
 					int choice;
 
 					do
 					{
-						cout << "Введите команду: ";
+						cout << "Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ: ";
 						getline(cin, console_buffer);
 						if (!string_to_int(console_buffer, choice))
-							cout << "Ошибка ввода данных\n";
+							cout << "РћС€РёР±РєР° РІРІРѕРґР° РґР°РЅРЅС‹С…\n";
 						else if (choice < 0 || choice > 2)
-							cout << "Команда не распознана\n";
+							cout << "РљРѕРјР°РЅРґР° РЅРµ СЂР°СЃРїРѕР·РЅР°РЅР°\n";
 					} while (!string_to_int(console_buffer, choice) || choice < 0 || choice > 2);
 
 					set_cinemahall(cinemahall, choose_film, ticket.startTime, path_tickets);
@@ -185,13 +185,13 @@ int main()
 							{
 								system("cls");
 
-								set_padding(strlen("Экран") - 4);
-								cout << "Экран\n\n";
+								set_padding(strlen("Р­РєСЂР°РЅ") - 4);
+								cout << "Р­РєСЂР°РЅ\n\n";
 								print_cinemahall(cinemahall);
 								int raw = -1;
 								do
 								{
-									cout << "\n0 - Назад\nВведите ряд: ";
+									cout << "\n0 - РќР°Р·Р°Рґ\nР’РІРµРґРёС‚Рµ СЂСЏРґ: ";
 									getline(cin, console_buffer);
 									if (console_buffer == "0")
 									{
@@ -208,7 +208,7 @@ int main()
 								int seat = -1;
 								do
 								{
-									cout << "\n0 - Назад\nВведите место: ";
+									cout << "\n0 - РќР°Р·Р°Рґ\nР’РІРµРґРёС‚Рµ РјРµСЃС‚Рѕ: ";
 									getline(cin, console_buffer);
 									if (console_buffer == "0")
 									{
@@ -229,7 +229,7 @@ int main()
 									{
 										ticket.raws.pop_back();
 										ticket.seats.pop_back();
-										cout << "Данное место занято\n";
+										cout << "Р”Р°РЅРЅРѕРµ РјРµСЃС‚Рѕ Р·Р°РЅСЏС‚Рѕ\n";
 										getchar();
 									}
 								}
@@ -257,10 +257,10 @@ int main()
 							int N;
 							do
 							{
-								cout << "Введите кол-во человек: ";
+								cout << "Р’РІРµРґРёС‚Рµ РєРѕР»-РІРѕ С‡РµР»РѕРІРµРє: ";
 								getline(cin, console_buffer);
 								if (!string_to_int(console_buffer, N))
-									cout << "Ошибка ввода данных\n";
+									cout << "РћС€РёР±РєР° РІРІРѕРґР° РґР°РЅРЅС‹С…\n";
 
 							} while (!string_to_int(console_buffer, N));
 
@@ -277,10 +277,10 @@ int main()
 								}
 							}
 							else
-								cout << "Невозможно посадить такое кол-во человек !\n";
+								cout << "РќРµРІРѕР·РјРѕР¶РЅРѕ РїРѕСЃР°РґРёС‚СЊ С‚Р°РєРѕРµ РєРѕР»-РІРѕ С‡РµР»РѕРІРµРє !\n";
 
-							set_padding(strlen("Экран") - 4);
-							cout << "Экран\n\n";
+							set_padding(strlen("Р­РєСЂР°РЅ") - 4);
+							cout << "Р­РєСЂР°РЅ\n\n";
 							print_cinemahall(cinemahall);
 							getchar();
 							save_ticket(ticket, path_tickets);
