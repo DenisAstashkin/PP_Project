@@ -16,7 +16,6 @@ public:
 
 	std::string fulldate() const
 	{
-		std::string r = std::to_string(day) + "." + std::to_string(month) + "." + std::to_string(year);
 		return std::to_string(day) + "." + std::to_string(month) + "." + std::to_string(year);
 	}
 

@@ -264,3 +264,95 @@ void save_ticket(const Ticket& ticket, const std::string& path)
 	fout << '\n';
 	fout.close();
 }
+
+bool find_time(const std::map<std::string, std::vector<Film>>& seanses, const std::string& time)
+{
+	for (auto i : seanses)
+		if (i.first == time)
+			return true;
+	return false;
+}
+
+bool find_time(std::vector<std::string> times, std::string time)
+{
+	for (int i = 0; i < times.size(); i++)
+	{
+		if (times[i] == time)
+			return true;
+	}
+	return false;
+}
+
+void reset(std::vector<std::vector<int>>& cinemahall)
+{
+
+
+	std::vector<int> tmp;
+	for (int i = 1; i < 8; i++)
+	{
+		for (int j = 0; j < i * 4; j++)
+		{
+			tmp.push_back(0);
+		}
+		cinemahall.push_back(tmp);
+		tmp.clear();
+	}
+}
+
+void set_cinemahall(std::vector<std::vector<int>>& cinemahall, const std::pair<std::string, Film>& choose_film, const std::string& time_seanse, const std::string& path_tickets)
+{
+	std::ifstream fin(path_tickets);
+
+	std::vector<Ticket> tickets;
+
+	if (!fin.is_open())
+		return;
+
+	std::string line;
+
+
+
+	std::vector<std::string> parse_line;
+
+	while (getline(fin, line))
+	{
+		Ticket t;
+		if (line == "")
+			continue;
+
+		parse_line = split(line, ";");
+
+		t.date = parse_line[0];
+		t.filmName = parse_line[1];
+		t.startTime = parse_line[2];
+		string_to_int(parse_line[3], t.hallNumber);
+		int raw;
+		for (auto i : split(parse_line[4], ","))
+		{
+			string_to_int(i, raw);
+			t.raws.push_back(raw);
+		}
+		int seat;
+		for (auto i : split(parse_line[5], ","))
+		{
+			string_to_int(i, seat);
+			t.seats.push_back(seat);
+		}
+		tickets.push_back(t);
+	}
+
+	for (auto i : tickets)
+	{
+		if (i.date == choose_film.first && i.filmName == choose_film.second.name && i.startTime == time_seanse)
+		{
+			for (int j = 0; j < i.raws.size(); j++)
+			{
+				int raw = i.raws[j];
+				int col = i.seats[j];
+				cinemahall[i.raws[j]][i.seats[j]] = 1;
+			}
+		}
+	}
+
+	fin.close();
+}

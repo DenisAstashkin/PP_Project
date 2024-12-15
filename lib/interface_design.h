@@ -236,15 +236,27 @@ void print_films(const std::map<std::string, std::vector<Film>>& seanses, const 
 		}
 	}
 
-	if (board.length() == 0)
-	{
-		std::cout << "\nРасписание фильмов на " << date.fulldate() << " ещё не появились\n";
-		std::cout << "\nПодождите...\n";
-		Sleep(4000);
-	}
-
-
 	std::cout << board << '\n';
 	std::cout << hhz[0] << '\n' << hhz[1] << '\n';
 	std::cout << board << '\n';
+}
+
+void print_ticket(const Ticket& ticket)
+{
+	std::cout << "Дата: " << ticket.date << '\n';
+	std::cout << "Название: " << ticket.filmName << '\n';
+	std::cout << "Время начала: " << ticket.startTime << '\n';
+	std::cout << "Ряд: ";
+	for (int i = 0; i < ticket.raws.size(); i++)
+	{
+		std::cout << ticket.raws[i] + 1 << ' ';
+	}
+	std::cout << '\n';
+	std::cout << "Место: ";
+	for (int i = 0; i < ticket.seats.size(); i++)
+	{
+		std::cout << ticket.seats[i] + 1 << ' ';
+	}
+	std::cout << '\n';
+	std::cout << "Зал: " << ticket.hallNumber;
 }
