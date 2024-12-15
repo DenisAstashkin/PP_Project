@@ -18,6 +18,7 @@
 
 using namespace std;
 
+
 int main()
 {
 #ifndef __linux__
@@ -154,73 +155,140 @@ int main()
 				if (back == 2 && find_time(choose_film.second.data, console_buffer))
 				{
 					
-					set_cinemahall(cinemahall, choose_film, ticket.startTime, path_tickets);
-					bool start = true;
+					cout << "\n0 - Назад\n1 - Выбрать места вручную\n2 - Выбрать N мест автоматически\n";
+
+					int choice;
+
 					do
 					{
-						system("cls");
+						cout << "Введите команду: ";
+						getline(cin, console_buffer);
+						if (!string_to_int(console_buffer, choice))
+							cout << "Ошибка ввода данных\n";
+						else if (choice < 0 || choice > 2)
+							cout << "Команда не распознана\n";
+					} while (!string_to_int(console_buffer, choice) || choice < 0 || choice > 2);
 
-						set_padding(strlen("Экран") - 4);
-						cout << "Экран\n\n";
-						print_cinemahall(cinemahall);
-						int raw = -1;
-						do
+					set_cinemahall(cinemahall, choose_film, ticket.startTime, path_tickets);
+					
+					switch (choice)
+					{
+						case 0:
 						{
-							cout << "\n0 - Назад\nВведите ряд: ";
-							getline(cin, console_buffer);
-							if (console_buffer == "0")
-							{
-								start = false;
-								break;
-							}
-						} while (!string_to_int(console_buffer, raw) || raw < 1 || raw > cinemahall.size());
-												
-						if (raw >= 1 && raw <= cinemahall.size())
-							ticket.raws.push_back(raw - 1);
-						else
 							break;
-
-						int seat = -1;
-						do
+						}
+						case 1:
 						{
-							cout << "\n0 - Назад\nВведите место: ";
-							getline(cin, console_buffer);
-							if (console_buffer == "0")
+							bool start = true;
+							do
 							{
-								start = false;
-								break;
-							}
-						} while (!string_to_int(console_buffer, seat) || seat < 1 || seat > cinemahall[raw - 1].size());
+								system("cls");
 
-						if (seat >= 1 && seat <= cinemahall[raw - 1].size())
-						{
-							ticket.seats.push_back(seat - 1);
-							if (cinemahall[raw - 1][seat - 1] == static_cast<int>(condition_place::empty))
+								set_padding(strlen("Экран") - 4);
+								cout << "Экран\n\n";
+								print_cinemahall(cinemahall);
+								int raw = -1;
+								do
+								{
+									cout << "\n0 - Назад\nВведите ряд: ";
+									getline(cin, console_buffer);
+									if (console_buffer == "0")
+									{
+										start = false;
+										break;
+									}
+								} while (!string_to_int(console_buffer, raw) || raw < 1 || raw > cinemahall.size());
+
+								if (raw >= 1 && raw <= cinemahall.size())
+									ticket.raws.push_back(raw - 1);
+								else
+									break;
+
+								int seat = -1;
+								do
+								{
+									cout << "\n0 - Назад\nВведите место: ";
+									getline(cin, console_buffer);
+									if (console_buffer == "0")
+									{
+										ticket.raws.pop_back();
+										start = false;
+										break;
+									}
+								} while (!string_to_int(console_buffer, seat) || seat < 1 || seat > cinemahall[raw - 1].size());
+
+								if (seat >= 1 && seat <= cinemahall[raw - 1].size())
+								{
+									ticket.seats.push_back(seat - 1);
+									if (cinemahall[raw - 1][seat - 1] == static_cast<int>(condition_place::empty))
+									{
+										cinemahall[raw - 1][seat - 1] = static_cast<int>(condition_place::your);
+									}
+									else
+									{
+										ticket.raws.pop_back();
+										ticket.seats.pop_back();
+										cout << "Данное место занято\n";
+										getchar();
+									}
+								}
+								else
+									break;
+
+
+							} while (start);
+							cinemahall.clear();
+							reset(cinemahall);
+
+							if (console_buffer == "0" && ticket.raws.size() != 0 && ticket.seats.size() != 0)
 							{
-								cinemahall[raw - 1][seat - 1] = static_cast<int>(condition_place::your);
-							}
-							else
-							{
-								ticket.raws.pop_back();
-								ticket.seats.pop_back();
-								cout << "Данное место занято\n";
+								save_ticket(ticket, path_tickets);
+								print_ticket(ticket);
 								getchar();
 							}
-						}
-						else
 							break;
+						}
+						case 2:
+						{
+							
+							system("cls");
 
-						
-					} while (start);
-					cinemahall.clear();
-					reset(cinemahall);
+							int N;
+							do
+							{
+								cout << "Введите кол-во человек: ";
+								getline(cin, console_buffer);
+								if (!string_to_int(console_buffer, N))
+									cout << "Ошибка ввода данных\n";
 
-					if (console_buffer == "0" && ticket.raws.size() != 0 && ticket.seats.size() != 0)
-					{
-						save_ticket(ticket, path_tickets);
-						print_ticket(ticket);
-						getchar();
+							} while (!string_to_int(console_buffer, N));
+
+							auto places = many_people(cinemahall, N + 1);
+
+							if (places[0].first != -1)
+							{
+								
+								for (int i = places[0].second; i < places[1].second; i++)
+								{
+									cinemahall[places[0].first][i] = static_cast<int>(condition_place::your);
+									ticket.seats.push_back(i);
+									ticket.raws.push_back(places[0].first);
+								}
+							}
+							else
+								cout << "Невозможно посадить такое кол-во человек !\n";
+
+							set_padding(strlen("Экран") - 4);
+							cout << "Экран\n\n";
+							print_cinemahall(cinemahall);
+							getchar();
+							save_ticket(ticket, path_tickets);
+							print_ticket(ticket);
+							getchar();
+							break;
+						}
 					}
+		
 						
 					back++;
 				}
