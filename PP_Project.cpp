@@ -75,18 +75,19 @@ int main()
 						cout << "\n\n";
 					}
 				}
-				cout << "\n0 - Выход\nВведите дату сеансов (дд.мм.гггг): ";
+				
 
 				do
 				{
+					cout << "\n0 - Выход\nВведите дату сеансов (дд.мм.гггг): ";
 					getline(cin, console_buffer);
 					if (console_buffer.length() == 1 && console_buffer.find('0') != string::npos)
 						exit(0);
 					check = validate_date(console_buffer);
 					if (!check)
-						cout << "Неверный формат даты, повторите попытку (дд.мм.гггг): ";
+						cout << "\nНеверный формат даты. ";
 					else if (!find_time(seanses, console_buffer))
-						cout << "Сенса с данной датой нет: ";
+						cout << "\nСеанса с данной датой нет";
 
 				} while (!check || !find_time(seanses, console_buffer));
 				ticket.date = console_buffer;

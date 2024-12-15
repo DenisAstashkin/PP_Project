@@ -188,15 +188,6 @@ void print_film(const Film& seanse, const std::string& date)
 		hhz[1] += "\t|  " + seanse.name + "  |\t";
 	}
 
-
-	if (board.length() == 0)
-	{
-		std::cout << "\nРасписание фильмов на " << date << " ещё не появились\n";
-		std::cout << "\nПодождите...\n";
-		Sleep(4000);
-	}
-
-
 	std::cout << board << '\n';
 	std::cout << hhz[0] << '\n' << hhz[1] << '\n';
 	std::cout << board << '\n';
