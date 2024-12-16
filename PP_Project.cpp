@@ -26,9 +26,19 @@ int main()
 	SetConsoleOutputCP(1251);
 #endif // !__linux__
 
-	string path_seanses = "E:\\C++\\PP_Project\\Data\\Schedule.txt";
-	string path_coasts = "E:\\C++\\PP_Project\\Data\\Coast.txt";
-	string path_tickets = "E:\\C++\\PP_Project\\Data\\Tickets.txt";
+	cout << "Введите путь до файла с расписанием сеансов: ";
+	string path_seanses;
+	getline(cin, path_seanses);
+	
+	cout << "Введите путь до файла с распределением бюджетасеансов: ";
+	string path_coasts;
+	getline(cin, path_coasts);
+
+	cout << "Введите путь до файла, где будут хранится билеты: ";
+	string path_tickets;
+	getline(cin, path_tickets);
+
+	system("cls");
 
 	vector<vector<int>> cinemahall;
 
@@ -264,27 +274,46 @@ int main()
 
 							} while (!string_to_int(console_buffer, N));
 
-							auto places = many_people(cinemahall, N + 1);
+							auto places = many_people(cinemahall, N);
 
 							if (places[0].first != -1)
 							{
 								
-								for (int i = places[0].second; i < places[1].second; i++)
+								for (int i = places[0].second; i <= places[1].second; i++)
 								{
 									cinemahall[places[0].first][i] = static_cast<int>(condition_place::your);
 									ticket.seats.push_back(i);
 									ticket.raws.push_back(places[0].first);
 								}
+
+								set_padding(strlen("Экран") - 4);
+								cout << "Экран\n\n";
+								print_cinemahall(cinemahall);
+
+								int save;
+								do
+								{
+									cout << "Подтвердить бронирование ? (0 - Нет, 1 - Да): ";
+									getline(cin, console_buffer);
+									
+									if (!string_to_int(console_buffer, save))
+										cout << "Ошибка ввода данных\n";
+									else if (save != 0 && save != 1)
+										cout << "Команда не распознана\n";
+									
+								} while (!string_to_int(console_buffer, save) || (save != 0 && save != 1));
+
+								if (save == 1)
+								{
+									save_ticket(ticket, path_tickets);
+									print_ticket(ticket);
+								}
 							}
 							else
 								cout << "Невозможно посадить такое кол-во человек !\n";
 
-							set_padding(strlen("Экран") - 4);
-							cout << "Экран\n\n";
-							print_cinemahall(cinemahall);
-							getchar();
-							save_ticket(ticket, path_tickets);
-							print_ticket(ticket);
+							cinemahall.clear();
+							reset(cinemahall);
 							getchar();
 							break;
 						}
