@@ -5,7 +5,7 @@
 
 struct Ticket 
 {
-	std::string userName;
+	int coast;
 
 	std::string date;
 	std::string filmName;

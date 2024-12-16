@@ -349,3 +349,47 @@ std::vector<std::pair<int, int>> many_people(std::vector<std::vector<int>> data,
 	}
 	return { {-1, -1}, {-1, -1} };
 }
+
+int get_coast(const std::pair<std::string, Film>&filmInfo, const std::string & time, const std::map<std::string, std::vector<Film>>&coasts)
+{
+	std::vector<std::pair<std::string, std::string>> coasts_film;
+	std::string coast;
+	for (auto i : coasts)
+	{
+		if (filmInfo.first != i.first)
+			continue;
+		for (auto j : i.second)
+		{
+			if (filmInfo.second.name == j.name )
+			{
+				for (int h = 0; h < j.data.size(); h++)
+				{
+					coasts_film.push_back(make_pair(j.data[h], j.subdata[h]));
+				}
+			}
+		}
+		for (int j = 0; j < filmInfo.second.data.size(); j++)
+		{
+			
+			for (int h = 0; h < coasts_film.size(); h++)
+			{
+				if (fulltime(filmInfo.second.data[j]) > fulltime(coasts_film[h].first) && filmInfo.second.data[j] == time)
+				{
+					for (char c : coasts_film[h].second)
+					{
+						if ((int)c >= -1)
+						{
+							if (isdigit(c))
+								coast += c;
+						}
+						else
+							break;
+					}
+				}
+			}
+		}
+	}
+	if (coast == "")
+		coast = "0";
+	return stoi(coast);
+}

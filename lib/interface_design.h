@@ -249,5 +249,6 @@ void print_ticket(const Ticket& ticket)
 		std::cout << ticket.seats[i] + 1 << ' ';
 	}
 	std::cout << '\n';
-	std::cout << "Зал: " << ticket.hallNumber;
+	std::cout << "Зал: " << ticket.hallNumber << '\n';
+	std::cout << "К оплате: " << ticket.coast * ticket.seats.size();
 }

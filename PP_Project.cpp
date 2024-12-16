@@ -1,6 +1,5 @@
 ﻿#include "lib/interface_design.h"
 #include "lib/logic.h"
-#include "lib/registration.h"
 #include "model/Film.h"
 #include "model/Date.h"
 #include "model/Ticket.h"
@@ -142,7 +141,7 @@ int main()
 
 				
 				print_coasts(choose_film, coasts, "Цена скоро появится");
-
+				
 				do
 				{
 					cout << "\n0 - Назад\nВведите время сеанса (чч:мм): ";
@@ -161,7 +160,11 @@ int main()
 				} while (!validateTime(console_buffer) || !find_time(choose_film.second.data, console_buffer));
 				if (back != 2)
 					break;
+				
 				ticket.startTime = console_buffer;
+
+				ticket.coast = get_coast(choose_film, ticket.startTime, coasts);
+
 				string_to_int(choose_film.second.subdata[get_filmIndex_time(choose_film.second, ticket.startTime)], ticket.hallNumber);
 				if (back == 2 && find_time(choose_film.second.data, console_buffer))
 				{
