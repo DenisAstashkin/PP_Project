@@ -356,6 +356,7 @@ int get_coast(const std::pair<std::string, Film>&filmInfo, const std::string & t
 	std::string coast;
 	for (auto i : coasts)
 	{
+		
 		if (filmInfo.first != i.first)
 			continue;
 		for (auto j : i.second)
@@ -373,8 +374,10 @@ int get_coast(const std::pair<std::string, Film>&filmInfo, const std::string & t
 			
 			for (int h = 0; h < coasts_film.size(); h++)
 			{
+				
 				if (fulltime(filmInfo.second.data[j]) > fulltime(coasts_film[h].first) && filmInfo.second.data[j] == time)
 				{
+					coast.clear();
 					for (char c : coasts_film[h].second)
 					{
 						if ((int)c >= -1)

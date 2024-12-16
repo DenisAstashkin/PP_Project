@@ -72,6 +72,7 @@ int main()
 				ticket.filmName = "";
 				ticket.hallNumber = 0;
 				ticket.startTime = "";
+				ticket.coast = 0;
 				ticket.seats.clear();
 				ticket.raws.clear();
 
@@ -256,6 +257,7 @@ int main()
 
 							if (console_buffer == "0" && ticket.raws.size() != 0 && ticket.seats.size() != 0)
 							{
+								ticket.coast *= ticket.seats.size();
 								save_ticket(ticket, path_tickets);
 								print_ticket(ticket);
 								getchar();
@@ -308,6 +310,7 @@ int main()
 
 								if (save == 1)
 								{
+									ticket.coast *= ticket.seats.size();
 									save_ticket(ticket, path_tickets);
 									print_ticket(ticket);
 								}
