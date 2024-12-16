@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../model/constants.h"
 #include "../model/Film.h"
 #include "../model/Date.h"
@@ -124,45 +124,6 @@ std::map<std::string, std::vector<Film>> parser(std::vector<std::string> lines)
 	for (std::string separate_str : lines) {
 		if (separate_str != "")
 		{
-
-			//std::string element;		//�������, ������� ����������� ����������� �� ����� ;
-			//Film data_Film;
-			//std::string date;
-			//short flag = 0;		//���� �� ������ ��� �����
-			//unsigned i = 0;
-
-			//while (flag < 2) {
-			//	if (separate_str[i] != ';') 
-			//	{
-			//		element.push_back(separate_str[i]);		//�������� ������, ���� �� �� ;
-			//	}
-			//	else 
-			//	{
-			//		switch (flag)
-			//		{
-			//		case 0:		//����
-			//			date = element;
-			//			break;
-			//		case 1:		//�������� ������
-			//			data_Film.name = element;
-			//			break;
-			//		default:
-			//			break;
-			//		}
-			//		element = "";
-			//		flag++;
-			//	}
-			//	i++;
-			//}
-			//separate_str.erase(0, i);		//��������� ������ �����
-			//std::string time;
-			//std::vector<std::string> times;
-
-			//for (std::string time : split(separate_str, ","))
-			//	data_Film.data.push_back(time);
-
-			//Film_dates[date].push_back(data_Film);
-
 			auto data = split(separate_str, ";");
 			Film data_Film;
 			data_Film.name = data[1];
